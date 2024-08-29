@@ -34,6 +34,7 @@ const Table: React.FC = () => {
 
   const handleOnClose = () => {
     setEditModalVisible(false);
+    setDeleteModalVisible(false);
     setSelectedProduct(null);
   };
 
@@ -107,7 +108,7 @@ const Table: React.FC = () => {
       </div>
       <DeleteProductModal
         isOpen={isDeleteModalVisible}
-        onClose={() => setDeleteModalVisible(false)}
+        onClose={handleOnClose}
         product={selectedProduct}
       />
       <AddEditModal
