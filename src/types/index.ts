@@ -1,9 +1,12 @@
+import { AxiosResponse } from "axios";
+import { Dispatch, SetStateAction } from "react";
+
 export interface Product {
-    id: number;
+    id?: number;
     name: string;
-    price: number;
-    category: string;
-    stock: number;
+    price?: number;
+    category?: string;
+    stock?: number;
     supplierId?: number;
     categoryId: number;
     quantityPerUnit: string;
@@ -14,10 +17,11 @@ export interface Product {
 }
 
 export interface ButtonProps {
-    onButtonClickFunc: () => void;
-    type?: 'delete' | 'edit';
+    onClick?: () => void;
+    type?: "submit" | "reset" | "button";
     text: string;
-    className: string;
+    classNames: string;
+    disabled?: boolean;
 }
 
 
@@ -26,7 +30,7 @@ export interface ModalProps {
     onClose: () => void;
     title?: string;
     children: React.ReactNode;
-    footer: React.ReactNode;
+    footer?: React.ReactNode;
 }
 
 export interface DeleteProductModalProps {
@@ -38,5 +42,7 @@ export interface DeleteProductModalProps {
 export interface AddEditModalProps {
     isOpen: boolean;
     onClose: () => void;
-    product?: Product | null
+    product?: Product | null;
 }
+
+export type ProductResponse = AxiosResponse<Product>;
