@@ -7,13 +7,13 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 import { Product } from "../types";
 import Button from "./Button";
 import { DeleteProductModal } from "./DeleteProductModal";
-import { EditProductModal } from "./EditProductModal";
+import { AddEditModal } from "./AddEditModal";
 
 const Table: React.FC = () => {
   const [isDeleteModalVisible, setDeleteModalVisible] =
     useState<boolean>(false);
   const [isEditModalVisible, setEditModalVisible] = useState<boolean>(false);
-  const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const gridRef = useRef<AgGridReact<Product>>(null);
 
@@ -72,12 +72,12 @@ const Table: React.FC = () => {
 
   const handleOpenEditModal = async (product: Product) => {
     setEditModalVisible(true);
-    setCurrentProduct(product);
+    setSelectedProduct(product);
   };
 
   const handleOpenDeleteModal = async (product: Product) => {
     setDeleteModalVisible(true);
-    setCurrentProduct(product);
+    setSelectedProduct(product);
   };
 
   return (
@@ -117,12 +117,12 @@ const Table: React.FC = () => {
       <DeleteProductModal
         isOpen={isDeleteModalVisible}
         onClose={() => setDeleteModalVisible(false)}
-        product={currentProduct}
+        product={selectedProduct}
       />
-      <EditProductModal
+      <AddEditModal
         isOpen={isEditModalVisible}
         onClose={() => setEditModalVisible(false)}
-        product={currentProduct}
+        product={selectedProduct}
       />
     </>
   );

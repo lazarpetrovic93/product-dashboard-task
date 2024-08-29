@@ -4,6 +4,13 @@ export interface Product {
     price: number;
     category: string;
     stock: number;
+    supplierId?: number;
+    categoryId: number;
+    quantityPerUnit: string;
+    unitPrice: number;
+    unitsInStock: number;
+    unitsOnOrder: number;
+    reorderLevel: number;
 }
 
 export interface ButtonProps {
@@ -22,13 +29,14 @@ export interface ModalProps {
     footer: React.ReactNode;
 }
 
-export interface EditProductModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    product: Product | null;
-}
 export interface DeleteProductModalProps {
     isOpen: boolean;
     onClose: () => void;
     product: Product | null;
+}
+
+export interface AddEditModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    product?: Product | null
 }
