@@ -2,12 +2,19 @@ import React from "react";
 import { ButtonProps } from "../types";
 
 const Button: React.FC<ButtonProps> = ({
-  onButtonClickFunc,
+  onClick,
   text,
-  className,
+  classNames,
+  type,
+  disabled = false,
 }) => {
   return (
-    <button className={className} onClick={onButtonClickFunc}>
+    <button
+      className={`min-w-[50px] ${classNames} disabled:pointer-events-none disabled:opacity-75`}
+      onClick={onClick}
+      type={type}
+      disabled={disabled}
+    >
       {text}
     </button>
   );

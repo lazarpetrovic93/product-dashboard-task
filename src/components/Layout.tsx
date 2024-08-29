@@ -4,9 +4,11 @@ import Footer from "./Footer";
 import Table from "./Table";
 
 const Layout: React.FC = () => (
-  <div className="flex flex-col min-h-screen">
+  <div className="flex flex-col h-screen">
     <Header />
-    <Table />
+    <main className="h-[calc(100vh-90px)]">
+      <Table />
+    </main>
     <Footer />
   </div>
 );
