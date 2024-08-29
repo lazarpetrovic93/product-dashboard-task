@@ -38,10 +38,20 @@ export const AddEditModal: React.FC<AddEditModalProps> = ({
 
   const mutation = useMutation({
     mutationFn: (newProduct: Product): Promise<Product> => {
+      const formatedData = {
+        ...newProduct,
+        supplierId: Number(newProduct.supplierId),
+        categoryId: Number(newProduct.categoryId),
+        unitPrice: Number(newProduct.unitPrice),
+        unitsInStock: Number(newProduct.unitsInStock),
+        unitsOnOrder: Number(newProduct.unitsOnOrder),
+        reorderLevel: Number(newProduct.reorderLevel),
+      };
+
       if (product && product.id) {
-        return editProduct(product.id, newProduct);
+        return editProduct(product.id, formatedData);
       } else {
-        return addProduct(newProduct);
+        return addProduct(formatedData);
       }
     },
     onSuccess: () => {
