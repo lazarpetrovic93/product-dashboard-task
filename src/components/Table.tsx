@@ -8,6 +8,7 @@ import { Product } from "../types";
 import Button from "./Button";
 import { DeleteProductModal } from "./DeleteProductModal";
 import { AddEditModal } from "./AddEditModal";
+import TableHeaderbutton from "./TableHeaderButton";
 
 const Table: React.FC = () => {
   const [isDeleteModalVisible, setDeleteModalVisible] =
@@ -15,12 +16,26 @@ const Table: React.FC = () => {
   const [isEditModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const gridRef = useRef<AgGridReact<Product>>(null);
-
   const { data, isLoading, error } = useQuery({
     queryKey: ["products"],
     queryFn: fetchProducts,
   });
+
+  const handleOpenEditModal = (product: Product) => {
+    setEditModalVisible(true);
+    setSelectedProduct(product);
+  };
+  const handleOpenAddModal = () => setEditModalVisible(true);
+
+  const handleOpenDeleteModal = (product: Product) => {
+    setDeleteModalVisible(true);
+    setSelectedProduct(product);
+  };
+
+  const handleOnClose = () => {
+    setEditModalVisible(false);
+    setSelectedProduct(null);
+  };
 
   const defaultColDef = {
     flex: 1,
@@ -40,21 +55,27 @@ const Table: React.FC = () => {
     { headerName: "Units On Order", field: "unitsOnOrder" },
     { headerName: "Reorder Level", field: "reorderLevel" },
     {
-      headerName: "",
+      headerName: "Actions",
       field: "actions",
+      filter: false,
+      sortable: false,
+      headerComponent: TableHeaderbutton,
+      headerComponentParams: {
+        handleOpenAddModal,
+      },
       cellRenderer: (params: { data: Product }) => {
         const { data } = params;
         return (
-          <div className="space-x-2">
+          <div className="pr-20px">
             <Button
               text="Edit"
-              onButtonClickFunc={() => handleOpenEditModal(data)}
-              className="text-blue-600"
+              onClick={() => handleOpenEditModal(data)}
+              classNames="text-blue-600"
             />
             <Button
               text="Delete"
-              onButtonClickFunc={() => handleOpenDeleteModal(data)}
-              className="text-red-600"
+              onClick={() => handleOpenDeleteModal(data)}
+              classNames="text-red-600"
             />
           </div>
         );
@@ -62,27 +83,9 @@ const Table: React.FC = () => {
     },
   ];
 
-  const handleNextPage = () => {
-    gridRef.current?.api.paginationGoToNextPage();
-  };
-
-  const handlePreviousPage = () => {
-    gridRef.current?.api.paginationGoToPreviousPage();
-  };
-
-  const handleOpenEditModal = async (product: Product) => {
-    setEditModalVisible(true);
-    setSelectedProduct(product);
-  };
-
-  const handleOpenDeleteModal = async (product: Product) => {
-    setDeleteModalVisible(true);
-    setSelectedProduct(product);
-  };
-
   return (
     <>
-      <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
+      <div className="ag-theme-alpine w-full h-full">
         <AgGridReact
           rowData={error ? null : data}
           columnDefs={columns}
@@ -101,18 +104,6 @@ const Table: React.FC = () => {
             '<span class="ag-overlay-no-rows-center">No data to display</span>'
           }
         />
-        <div className="flex justify-between mt-4">
-          <Button
-            onButtonClickFunc={handlePreviousPage}
-            className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
-            text="Previous"
-          />
-          <Button
-            onButtonClickFunc={handleNextPage}
-            className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
-            text="Next"
-          />
-        </div>
       </div>
       <DeleteProductModal
         isOpen={isDeleteModalVisible}
@@ -121,7 +112,7 @@ const Table: React.FC = () => {
       />
       <AddEditModal
         isOpen={isEditModalVisible}
-        onClose={() => setEditModalVisible(false)}
+        onClose={handleOnClose}
         product={selectedProduct}
       />
     </>
